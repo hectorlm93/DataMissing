@@ -1,4 +1,6 @@
 import eu.amidst.core.datastream.DataInstance;
+import eu.amidst.core.datastream.DataOnMemory;
+import eu.amidst.core.datastream.DataOnMemoryListContainer;
 import eu.amidst.core.datastream.DataStream;
 import eu.amidst.core.io.BayesianNetworkWriter;
 import eu.amidst.core.io.DataStreamLoader;
@@ -12,14 +14,38 @@ import eu.amidst.core.variables.Variables;
 import eu.amidst.dynamic.models.DynamicBayesianNetwork;
 import eu.amidst.dynamic.utils.DynamicBayesianNetworkGenerator;
 
+
+
+import eu.amidst.core.utils.FixedBatchParallelSpliteratorWrapper;
+import javafx.scene.chart.PieChart;
+
+import java.util.Iterator;
+import java.util.stream.Collectors;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+
 public class DataMissing {
     public static void main(String[] args) throws Exception {
 
         //
          // Cargamos el dataset de los inmuebles
+        //DataStream<DataInstance> data = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO.arff");
         //
 
-        DataStream<DataInstance> data = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO.arff");
+        DataStream<DataInstance> train1 = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO.arff");
+        DataStream<DataInstance> test1 = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO2.arff");
+
+        DataOnMemory<DataInstance> train2 = new DataOnMemoryListContainer<DataInstance>(train1.getAttributes());
+        DataOnMemory<DataInstance> test2 = new DataOnMemoryListContainer<DataInstance>(test1.getAttributes());
+
+        /**
+         *
+         *
+         *
+         *
+         */
 
         /**
          * 1. Una vez que se carguen los  datos, se crea una variable aleatoria para cada uno de los
@@ -39,7 +65,7 @@ public class DataMissing {
         Variable IMP_TASACION = variables.newGaussianVariable(data.getAttributes().getAttributeByName("IMP_TASA"));
         Variable TIPO_VIVIENDA = variables.newGaussianVariable(data.getAttributes().getAttributeByName("TXT_SUB_CATE_ACTI"));
         */
-        Variables variables = new Variables(data.getAttributes());
+        Variables variables = new Variables(train1.getAttributes());
 
         Variable HABITACIONES = variables.getVariableByName("NUM_HAB");
         Variable BANYO = variables.getVariableByName("NUM_BAN");
@@ -118,22 +144,34 @@ public class DataMissing {
             //Se fija el tamaño de la muestra
             Apredizaje.setWindowsSize(10);
 
+
+
             //Vemos la salida
             Apredizaje.setOutput(true);
 
             // Hacemos uso del el dataset de nuestros datos
-            Apredizaje.setDataStream(data);
+            Apredizaje.setDataStream(train1);
 
             //Se realiza el aprendizaje
             Apredizaje.runLearning();
 
+
+
             //Y finalmente se consigue el modelo
             BayesianNetwork bnModel = Apredizaje.getLearntBayesianNetwork();
 
+            
             // Se imprime el modelo
             System.out.println(bnModel.toString());
 
         //
+
+
+        //Predict
+
+
+
+
 
         /*
         BayesianNetwork bn = new BayesianNetwork(dag);
