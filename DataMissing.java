@@ -1,3 +1,4 @@
+package eu.amidst.dynamic.examples.learning;
 import eu.amidst.core.datastream.DataInstance;
 import eu.amidst.core.datastream.DataOnMemory;
 import eu.amidst.core.datastream.DataOnMemoryListContainer;
@@ -138,11 +139,12 @@ public class DataMissing {
 
             //Creamos el objeto SVB
             SVB Apredizaje = new SVB();
+        
             //Se fija la estructura del DAG
             Apredizaje.setDAG(dag); //¿Se incluye aqui el DAG?
 
             //Se fija el tamaño de la muestra
-            Apredizaje.setWindowsSize(10);
+            Apredizaje.setWindowsSize(50);
 
 
 
