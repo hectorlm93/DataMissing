@@ -34,11 +34,11 @@ public class DataMissing {
         //DataStream<DataInstance> data = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO.arff");
         //
 
-        DataStream<DataInstance> train1 = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO.arff");
-        DataStream<DataInstance> test1 = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO2.arff");
+        DataStream<DataInstance> train1 = DataStreamLoader.open("datasets/INMUEBLES_TRAIN_ANONIMO.arff");
+        DataStream<DataInstance> test1 = DataStreamLoader.open("datasets/INMUEBLE_TEST_ANONIMO.arff");
 
-        DataOnMemory<DataInstance> train2 = new DataOnMemoryListContainer<DataInstance>(train1.getAttributes());
-        DataOnMemory<DataInstance> test2 = new DataOnMemoryListContainer<DataInstance>(test1.getAttributes());
+        /*DataOnMemory<DataInstance> train2 = new DataOnMemoryListContainer<DataInstance>(train1.getAttributes());
+       /* DataOnMemory<DataInstance> test2 = new DataOnMemoryListContainer<DataInstance>(test1.getAttributes());
 
         /**
          *
@@ -155,12 +155,14 @@ public class DataMissing {
             //Se realiza el aprendizaje
             Apredizaje.runLearning();
 
+            //
+        Apredizaje.predictedLogLikelihood(test1.toDataOnMemory());
 
 
             //Y finalmente se consigue el modelo
             BayesianNetwork bnModel = Apredizaje.getLearntBayesianNetwork();
 
-            
+
             // Se imprime el modelo
             System.out.println(bnModel.toString());
 
