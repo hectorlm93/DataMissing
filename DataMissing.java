@@ -21,6 +21,7 @@ import eu.amidst.core.utils.FixedBatchParallelSpliteratorWrapper;
 import javafx.scene.chart.PieChart;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -35,8 +36,8 @@ public class DataMissing {
         //DataStream<DataInstance> data = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO.arff");
         //
 
-        DataStream<DataInstance> train1 = DataStreamLoader.open("datasets/INMUEBLES_TRAIN_ANONIMO.arff");
-        DataStream<DataInstance> test1 = DataStreamLoader.open("datasets/INMUEBLE_TEST_ANONIMO.arff");
+        DataStream<DataInstance> train1 = DataStreamLoader.open("datasets/INMUEBLES_TRAIN_ANONIMO-small.arff");
+        DataStream<DataInstance> test1 = DataStreamLoader.open("datasets/INMUEBLE_TEST_ANONIMO-small.arff");
 
         /*DataOnMemory<DataInstance> train2 = new DataOnMemoryListContainer<DataInstance>(train1.getAttributes());
        /* DataOnMemory<DataInstance> test2 = new DataOnMemoryListContainer<DataInstance>(test1.getAttributes());
@@ -136,17 +137,17 @@ public class DataMissing {
 
         //Codigo de Aprendizaje  SVB pasandole el DAG que has definido
 
-
+            int batchSize = 1000;
             //Creamos el objeto SVB
             SVB Apredizaje = new SVB();
-        
+
             //Se fija la estructura del DAG
             Apredizaje.setDAG(dag); //¿Se incluye aqui el DAG?
 
             //Se fija el tamaño de la muestra
-            Apredizaje.setWindowsSize(50);
+            Apredizaje.setWindowsSize(batchSize);
 
-
+            Apredizaje.getPlateuStructure().getVMP().setMaxIter(1000);
 
             //Vemos la salida
             Apredizaje.setOutput(true);
@@ -158,10 +159,10 @@ public class DataMissing {
             Apredizaje.runLearning();
 
             //
-        Apredizaje.predictedLogLikelihood(test1.toDataOnMemory());
 
+        double testLL = test1.streamOfBatches(batchSize).mapToDouble(batch -> Apredizaje.predictedLogLikelihood(batch)).sum();
 
-            //Y finalmente se consigue el modelo
+        //Y finalmente se consigue el modelo
             BayesianNetwork bnModel = Apredizaje.getLearntBayesianNetwork();
 
 
