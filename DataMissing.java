@@ -36,8 +36,8 @@ public class DataMissing {
         //DataStream<DataInstance> data = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO.arff");
         //
 
-        DataStream<DataInstance> train1 = DataStreamLoader.open("datasets/INMUEBLES_TRAIN_ANONIMO-small.arff");
-        DataStream<DataInstance> test1 = DataStreamLoader.open("datasets/INMUEBLE_TEST_ANONIMO-small.arff");
+        DataStream<DataInstance> train1 = DataStreamLoader.open("datasets/INMUEBLES_TRAIN_ANONIMO.arff");
+        DataStream<DataInstance> test1 = DataStreamLoader.open("datasets/INMUEBLE_TEST_ANONIMO.arff");
 
         /*DataOnMemory<DataInstance> train2 = new DataOnMemoryListContainer<DataInstance>(train1.getAttributes());
        /* DataOnMemory<DataInstance> test2 = new DataOnMemoryListContainer<DataInstance>(test1.getAttributes());
@@ -87,12 +87,19 @@ public class DataMissing {
          *     método getParentSet y luego llamamos al metodo addParent()
          */
         DAG dag = new DAG(variables);
-            /*  IZQUIERDA -> HIJOS       DERECHA -> PADRES */
+
+        /**
+         *
+         * PRIMER MODELO
+         */
+
+       /*  IZQUIERDA -> HIJOS       DERECHA -> PADRES */
 
                                 /* TASACIÓN */
 
         dag.getParentSet(IMP_TASACION).addParent(METROS_UTILES);
         dag.getParentSet(IMP_TASACION).addParent(ASCENSOR);
+
 
                                 /* ASCENSOR */
 
@@ -102,11 +109,12 @@ public class DataMissing {
 
         dag.getParentSet(METROS_UTILES).addParent(METROS_CUADRADOS);
 
-                                /* METROS_UTILES */
+                                /* METROS_CUADRADOS */
 
         dag.getParentSet(METROS_CUADRADOS).addParent(HABITACIONES);
         dag.getParentSet(METROS_CUADRADOS).addParent(BANYO);
         dag.getParentSet(METROS_CUADRADOS).addParent(TIPO_VIVIENDA);
+
 
                                 /* BAÑOS */
 
@@ -118,11 +126,98 @@ public class DataMissing {
         dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
 
 
+       /**
+        *
+        *
+        *
+        *
+        * SEGUNDO MODELO
+        *
+        *
+        *
+        *
+       */
+
+
+        /* TASACIÓN */
+
+       /** dag.getParentSet(IMP_TASACION).addParent(METROS_UTILES);
+        dag.getParentSet(IMP_TASACION).addParent(HABITACIONES);
+        dag.getParentSet(IMP_TASACION).addParent(BANYO);
+
+         /* ASCENSOR */
+
+       /**   dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
+
+         /* METROS_UTILES */
+
+
+      /**  dag.getParentSet(METROS_UTILES).addParent(HABITACIONES);
+        dag.getParentSet(METROS_UTILES).addParent(BANYO);
+
+         /* METROS_CUADRADOS */
+
+       /**   dag.getParentSet(METROS_CUADRADOS).addParent(METROS_UTILES);
+
+
+         /* BAÑOS */
+
+      /**   dag.getParentSet(BANYO).addParent(HABITACIONES);
+         dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
+
+         /* HABITACIONES */
+
+        /** dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
+
+
+        /*
+         *
+         *
+         TERCER MODELO
+         *
+         *
+         *
+         *
+         */
+
+
+        /* TASACIÓN */
+
+        /*dag.getParentSet(IMP_TASACION).addParent(TIPO_VIVIENDA);
+        dag.getParentSet(IMP_TASACION).addParent(HABITACIONES);
+        dag.getParentSet(IMP_TASACION).addParent(BANYO);
+
+        /* ASCENSOR */
+
+        /*dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
+
+        /* METROS_UTILES */
+
+
+        /**dag.getParentSet(METROS_UTILES).addParent(METROS_CUADRADOS);
+
+
+        /* METROS_CUADRADOS */
+
+       /** dag.getParentSet(METROS_CUADRADOS).addParent(TIPO_VIVIENDA);
+        ;
+
+        /* BAÑOS */
+
+        /***dag.getParentSet(BANYO).addParent(METROS_UTILES);
+        dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
+
+        /* HABITACIONES */
+
+        /***dag.getParentSet(HABITACIONES).addParent(BANYO);
+        dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
+
+
         /**
          * 1. Nos fijamos si el grafo contiene ciclos
          *
          *
-         * 2. Dibujamos la salida del DAG creados y vemos si está todo como esperamos.
+         * 2. Dibujamos la salida del DAG creados y vemos si esta all como esperamos.
          * */
         if (dag.containCycles()) {
             try {
@@ -147,7 +242,7 @@ public class DataMissing {
             //Se fija el tamaño de la muestra
             Apredizaje.setWindowsSize(batchSize);
 
-            Apredizaje.getPlateuStructure().getVMP().setMaxIter(1000);
+            Apredizaje.getPlateuStructure().getVMP().setMaxIter(10000);
 
             //Vemos la salida
             Apredizaje.setOutput(true);
