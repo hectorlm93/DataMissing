@@ -1,7 +1,7 @@
-@relation 'R_data_frame-weka.filters.unsupervised.instance.RemoveWithValues-S0.0-Clast-L4,7,9,10,12,13-H-weka.filters.unsupervised.attribute.Remove-R1,8'
+@relation 'R_data_frame-weka.filters.unsupervised.instance.RemoveWithValues-S0.0-Clast-L4,7,9,10,12,13-H-weka.filters.unsupervised.attribute.Remove-R1,8-weka.filters.unsupervised.attribute.NumericToNominal-R2'
 
 @attribute IMP_TASA numeric
-@attribute NUM_ASC numeric
+@attribute NUM_ASC {0,1}
 @attribute NUM_BAN numeric
 @attribute NUM_HAB numeric
 @attribute NUM_VAL_M2_UTIL numeric
