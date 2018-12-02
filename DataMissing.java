@@ -25,14 +25,14 @@ public class DataMissing {
         aprendizaje.getPlateuStructure().getVMP().setThreshold(0.00000001);
 
         aprendizaje.getPlateuStructure()
-            .getNonReplictedNodes()
-            .filter(node -> node.getName().contains("_alpha"))
-            .forEach(node ->{
-                EF_NormalParameter param = (EF_NormalParameter)node.getQDist();
-                param.setNaturalWithMeanPrecision(0,1);
-                param.updateMomentFromNaturalParameters();
+                .getNonReplictedNodes()
+                .filter(node -> node.getName().contains("_alpha"))
+                .forEach(node ->{
+                    EF_NormalParameter param = (EF_NormalParameter)node.getQDist();
+                    param.setNaturalWithMeanPrecision(0,1);
+                    param.updateMomentFromNaturalParameters();
 
-            });
+                });
 
         aprendizaje.getPlateuStructure()
                 .getNonReplictedNodes()
@@ -45,24 +45,23 @@ public class DataMissing {
                 });
 
 
-            List<Node> nodes = aprendizaje.getPlateuStructure()
-                    .getNonReplictedNodes().collect(Collectors.toList());
+        List<Node> nodes = aprendizaje.getPlateuStructure()
+                .getNonReplictedNodes().collect(Collectors.toList());
     }
 
 
     public static void main(String[] args) throws Exception {
 
         //
-         // Cargamos el dataset de los inmuebles
+        // Cargamos el dataset de los inmuebles
         //DataStream<DataInstance> data = DataStreamLoader.open("datasets/INMUEBLE_SIN_OUTLIER_ANONIMO.arff");
         //
 
-        DataStream<DataInstance> train1 = DataStreamLoader.open("./INMUEBLES_TRAIN_ANONIMO-random.arff");
-        DataStream<DataInstance> test1 = DataStreamLoader.open("./INMUEBLE_TEST_ANONIMO.arff");
+        DataStream<DataInstance> train1 = DataStreamLoader.open("datasets/INMUEBLES_TRAIN_ANONIMO.arff");
+        DataStream<DataInstance> test1 = DataStreamLoader.open("datasets/INMUEBLE_TEST_ANONIMO.arff");
 
         /*DataOnMemory<DataInstance> train2 = new DataOnMemoryListContainer<DataInstance>(train1.getAttributes());
        /* DataOnMemory<DataInstance> test2 = new DataOnMemoryListContainer<DataInstance>(test1.getAttributes());
-
         /**
          *
          *
@@ -76,7 +75,6 @@ public class DataMissing {
          *
          *
          * 2. Podemos extraer los objetos variables usando el método getVariableByName()
-
          */
 /*
         Variables variables = new Variables();
@@ -114,54 +112,65 @@ public class DataMissing {
          * PRIMER MODELO
          */
 
-       /*  IZQUIERDA -> HIJOS       DERECHA -> PADRES */
-
-  /*                              // TASACIÓN
-
+        /*  IZQUIERDA -> HIJOS       DERECHA -> PADRES */
+/*
+                                // TASACIÓN
         dag.getParentSet(IMP_TASACION).addParent(METROS_UTILES);
         dag.getParentSet(IMP_TASACION).addParent(ASCENSOR);
-
-
                                 // ASCENSOR
-
         dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
-
                                 // METROS_UTILES
-
         dag.getParentSet(METROS_UTILES).addParent(METROS_CUADRADOS);
-
                                 // METROS_CUADRADOS
-
         dag.getParentSet(METROS_CUADRADOS).addParent(HABITACIONES);
         dag.getParentSet(METROS_CUADRADOS).addParent(BANYO);
         dag.getParentSet(METROS_CUADRADOS).addParent(TIPO_VIVIENDA);
-
-
                                 // BAÑOS
-
         dag.getParentSet(BANYO).addParent(HABITACIONES);
         dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
-
                                 // HABITACIONES
-
         dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
 */
 
-       /**
-        *
-        *
-        *
-        *
-        * SEGUNDO MODELO
-        *
-        *
-        *
-        *
-       */
+/**
+ * SEPTIMO MODELO
+ */
 
 
         // TASACIÓN
+        dag.getParentSet(IMP_TASACION).addParent(METROS_CUADRADOS);
+        dag.getParentSet(IMP_TASACION).addParent(ASCENSOR);
+        // ASCENSOR
+        dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
+        // METROS_CUADRADOS
+        dag.getParentSet(METROS_CUADRADOS).addParent(METROS_UTILES);
+        // METROS_UTILES
+        dag.getParentSet(METROS_UTILES).addParent(HABITACIONES);
+        dag.getParentSet(METROS_UTILES).addParent(BANYO);
+        dag.getParentSet(METROS_UTILES).addParent(TIPO_VIVIENDA);
+        dag.getParentSet(METROS_UTILES).addParent(IMP_TASACION);
+        // BAÑOS
+        dag.getParentSet(BANYO).addParent(HABITACIONES);
+        dag.getParentSet(BANYO).addParent(METROS_CUADRADOS);
+        dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
+        // HABITACIONES
+        dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
+        dag.getParentSet(HABITACIONES).addParent(BANYO);
+        /**
+         *
+         *
+         *
+         *
+         * SEGUNDO MODELO
+         *
+         *
+         *
+         *
+         */
 
+
+        // TASACIÓN
+/*
         dag.getParentSet(IMP_TASACION).addParent(METROS_UTILES);
         dag.getParentSet(IMP_TASACION).addParent(HABITACIONES);
         dag.getParentSet(IMP_TASACION).addParent(BANYO);
@@ -173,24 +182,24 @@ public class DataMissing {
         // METROS_UTILES
 
 
-       dag.getParentSet(METROS_UTILES).addParent(HABITACIONES);
+        dag.getParentSet(METROS_UTILES).addParent(HABITACIONES);
         dag.getParentSet(METROS_UTILES).addParent(BANYO);
 
         // METROS_CUADRADOS
 
-          dag.getParentSet(METROS_CUADRADOS).addParent(METROS_UTILES);
+        dag.getParentSet(METROS_CUADRADOS).addParent(METROS_UTILES);
 
 
         // BAÑOS
 
-       dag.getParentSet(BANYO).addParent(HABITACIONES);
-         dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
+        dag.getParentSet(BANYO).addParent(HABITACIONES);
+        dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
 
         // HABITACIONES
 
         dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
 
-
+*/
         /*
          *
          *
@@ -203,36 +212,108 @@ public class DataMissing {
 
 
         /* TASACIÓN */
-
-        /*dag.getParentSet(IMP_TASACION).addParent(TIPO_VIVIENDA);
+/*
+        dag.getParentSet(IMP_TASACION).addParent(TIPO_VIVIENDA);
         dag.getParentSet(IMP_TASACION).addParent(HABITACIONES);
         dag.getParentSet(IMP_TASACION).addParent(BANYO);
+        // ASCENSOR
 
-        /* ASCENSOR */
-
-        /*dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
-
-        /* METROS_UTILES */
+        dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
+        // METROS_UTILES
 
 
-        /**dag.getParentSet(METROS_UTILES).addParent(METROS_CUADRADOS);
+        dag.getParentSet(METROS_UTILES).addParent(METROS_CUADRADOS);
+         // METROS_CUADRADOS
 
+        dag.getParentSet(METROS_CUADRADOS).addParent(TIPO_VIVIENDA);
 
-        /* METROS_CUADRADOS */
+         // BAÑOS
 
-       /** dag.getParentSet(METROS_CUADRADOS).addParent(TIPO_VIVIENDA);
-        ;
-
-        /* BAÑOS */
-
-        /***dag.getParentSet(BANYO).addParent(METROS_UTILES);
+        dag.getParentSet(BANYO).addParent(METROS_UTILES);
         dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
+         // HABITACIONES
 
-        /* HABITACIONES */
+        dag.getParentSet(HABITACIONES).addParent(BANYO);
+        dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
+*/
 
-        /***dag.getParentSet(HABITACIONES).addParent(BANYO);
+        /**
+         *  CUARTO MODELO
+         */
+/*
+        // TASACIÓN
+        dag.getParentSet(IMP_TASACION).addParent(METROS_CUADRADOS);
+        dag.getParentSet(IMP_TASACION).addParent(ASCENSOR);
+        // ASCENSOR
+        dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
+        // METROS_CUADRADOS
+        dag.getParentSet(METROS_CUADRADOS).addParent(METROS_UTILES);
+        // METROS_UTILES
+        dag.getParentSet(METROS_UTILES).addParent(HABITACIONES);
+        dag.getParentSet(METROS_UTILES).addParent(BANYO);
+        dag.getParentSet(METROS_UTILES).addParent(TIPO_VIVIENDA);
+        // BAÑOS
+        dag.getParentSet(BANYO).addParent(HABITACIONES);
+        dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
+        // HABITACIONES
+        dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
+*/
+
+        /**
+         *
+         * QUINTO MODELO
+         */
+
+/*
+        // TASACIÓN
+        dag.getParentSet(IMP_TASACION).addParent(METROS_UTILES);
+        dag.getParentSet(IMP_TASACION).addParent(ASCENSOR);
+        dag.getParentSet(IMP_TASACION).addParent(TIPO_VIVIENDA);
+        // ASCENSOR
+        dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
+        // METROS_UTILES
+        dag.getParentSet(METROS_UTILES).addParent(METROS_CUADRADOS);
+        dag.getParentSet(METROS_UTILES).addParent(TIPO_VIVIENDA);
+        // METROS_CUADRADOS
+        dag.getParentSet(METROS_CUADRADOS).addParent(HABITACIONES);
+        dag.getParentSet(METROS_CUADRADOS).addParent(BANYO);
+        dag.getParentSet(METROS_CUADRADOS).addParent(TIPO_VIVIENDA);
+        // BAÑOS
+        dag.getParentSet(BANYO).addParent(HABITACIONES);
+        dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
+        // HABITACIONES
         dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
 
+*/
+        /**
+         *  SEXTO MODELO
+         */
+        /* TASACIÓN */
+/*
+        dag.getParentSet(IMP_TASACION).addParent(TIPO_VIVIENDA);
+        dag.getParentSet(IMP_TASACION).addParent(HABITACIONES);
+        dag.getParentSet(IMP_TASACION).addParent(BANYO);
+        // ASCENSOR
+
+        dag.getParentSet(ASCENSOR).addParent(TIPO_VIVIENDA);
+        // METROS_UTILES
+
+
+        dag.getParentSet(METROS_UTILES).addParent(METROS_CUADRADOS);
+         // METROS_CUADRADOS
+
+        dag.getParentSet(METROS_CUADRADOS).addParent(TIPO_VIVIENDA);
+
+         // BAÑOS
+
+        dag.getParentSet(BANYO).addParent(HABITACIONES);
+        dag.getParentSet(BANYO).addParent(TIPO_VIVIENDA);
+         // HABITACIONES
+
+        dag.getParentSet(HABITACIONES).addParent(BANYO);
+        dag.getParentSet(HABITACIONES).addParent(TIPO_VIVIENDA);
+
+*/
 
         /**
          * 1. Nos fijamos si el grafo contiene ciclos
@@ -253,41 +334,41 @@ public class DataMissing {
 
         //Codigo de Aprendizaje  SVB pasandole el DAG que has definido
 
-            int batchSize = 5000;
-            //Creamos el objeto SVB
-            SVB aprendizaje = new SVB();
+        int batchSize = 20000;
+        //Creamos el objeto SVB
+        SVB aprendizaje = new SVB();
 
-            //Se fija la estructura del DAG
-            aprendizaje.setDAG(dag); //¿Se incluye aqui el DAG?
+        //Se fija la estructura del DAG
+        aprendizaje.setDAG(dag); //¿Se incluye aqui el DAG?
 
-            //Se fija el tamaño de la muestra
-            aprendizaje.setWindowsSize(batchSize);
+        //Se fija el tamaño de la muestra
+        aprendizaje.setWindowsSize(batchSize);
 
-            //Vemos la salida
-            aprendizaje.setOutput(true);
+        //Vemos la salida
+        aprendizaje.setOutput(true);
 
-            // Hacemos uso del el dataset de nuestros datos
-            //aprendizaje.setDataStream(train1);
-            //Se realiza el aprendizaje
-            //aprendizaje.runLearning();
+        // Hacemos uso del el dataset de nuestros datos
+        //aprendizaje.setDataStream(train1);
+        //Se realiza el aprendizaje
+        //aprendizaje.runLearning();
 
-            aprendizaje.initLearning();
+        aprendizaje.initLearning();
 
-            DataMissing.setUpLearning(aprendizaje);
+        DataMissing.setUpLearning(aprendizaje);
 
-            double elbo = aprendizaje.updateModel(train1);
-
-
-            double testLL = test1.streamOfBatches(batchSize).mapToDouble(batch -> aprendizaje.predictedLogLikelihood(batch)).sum();
-
-            System.out.println("Predictive LogLikelihood: " +  testLL);
-
-            //Y finalmente se consigue el modelo
-            BayesianNetwork bnModel = aprendizaje.getLearntBayesianNetwork();
+        double elbo = aprendizaje.updateModel(train1);
 
 
-            // Se imprime el modelo
-            System.out.println(bnModel.toString());
+        double testLL = test1.streamOfBatches(batchSize).mapToDouble(batch -> aprendizaje.predictedLogLikelihood(batch)).sum();
+
+        System.out.println("Predictive LogLikelihood: " +  testLL);
+
+        //Y finalmente se consigue el modelo
+        BayesianNetwork bnModel = aprendizaje.getLearntBayesianNetwork();
+
+
+        // Se imprime el modelo
+        System.out.println(bnModel.toString());
 
         //
 
